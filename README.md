@@ -1,1 +1,3 @@
 # CS-32-Project-Maria-and-Emily
+
+Our goal is to create the computational core of an outfit generator by filtering clothing items based on user constraints. Each clothing item will have attributes such as weather, occasion, season, and color. The user will be able to enter preferences, and the program will filter the available items to return only those that match the given constraints. The main computational part of this project is designing the logic that compares user input to item attributes and determines which clothing items satisfy all required conditions. This project could later be expanded into a full outfit generator, but our current focus is the filtering system itself. 
