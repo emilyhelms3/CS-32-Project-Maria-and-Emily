@@ -32,3 +32,30 @@ while True:
 
 print("\nYour wardrobe:")
 print(wardrobe)
+
+OCCASIONS = [
+    "casual",
+    "work / class",
+    "going out",
+    "formal / event",
+    "outdoor / active",
+    "date"
+]
+
+print("What's the occasion?")
+for i, occ in enumerate(OCCASIONS, 1):
+    print(f"  {i}. {occ}")
+
+while True:
+    choice = input("\nEnter a number or type your own: ").strip()
+
+    if choice.isdigit() and 1 <= int(choice) <= len(OCCASIONS):
+        occasion = OCCASIONS[int(choice) - 1]
+        break
+    elif choice:
+        occasion = choice.lower()
+        break
+    else:
+        print("Please enter something.")
+
+print(f"\nOccasion: {occasion}")
