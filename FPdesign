@@ -1,0 +1,34 @@
+# outfit creater that takes input of list of possible items of clothes and considers constraits
+    #then returns outfit ideas
+print("welcome to your personal stylist!")
+
+wardrobe = {
+    "tops": [],
+    "bottoms": [],
+    "outerwear": [],
+    "shoes": [],
+    "accessories": [],
+    "dresses": []
+}
+
+categories = list(wardrobe.keys())
+
+print("Add your clothes. Type 'done' when finished.\n")
+
+while True:
+    print("Categories:", ", ".join(categories))
+    cat = input("Category (or 'done'): ").strip().lower()
+
+    if cat == "done":
+        break
+    if cat not in wardrobe:
+        print("Invalid category, try again.")
+        continue
+
+    item = input(f"Item name for {cat}: ").strip()
+    if item:
+        wardrobe[cat].append(item)
+        print(f"Added '{item}' to {cat}.\n")
+
+print("\nYour wardrobe:")
+print(wardrobe)
