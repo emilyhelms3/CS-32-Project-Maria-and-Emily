@@ -50,7 +50,7 @@ while True: #start loop that asks user for the occasions
     choice = input("\nEnter a number or type your own: ").strip()
 
     if choice.isdigit() and 1 <= int(choice) <= len(OCCASIONS): #makes sure input is a number converts to integer and makes sure it is within the length of occasions
-        occasion = OCCASIONS[int(choice) - 1]
+        occasion = OCCASIONS[int(choice) - 1] #subtracts 1 from choice beacuse indexing starts at 0 but occ list starts at 1
         break
     elif choice:
         occasion = choice.lower()
