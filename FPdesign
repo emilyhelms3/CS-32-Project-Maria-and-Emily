@@ -46,10 +46,10 @@ print("What's the occasion?") # asks user what the occasions is
 for i, occ in enumerate(OCCASIONS, 1): #loops through occasions and assigns them each a number starting at 1 tomorrow
     print(f"  {i}. {occ}")
 
-while True:
+while True: #start loop that asks user for the occasions
     choice = input("\nEnter a number or type your own: ").strip()
 
-    if choice.isdigit() and 1 <= int(choice) <= len(OCCASIONS):
+    if choice.isdigit() and 1 <= int(choice) <= len(OCCASIONS): #
         occasion = OCCASIONS[int(choice) - 1]
         break
     elif choice:
