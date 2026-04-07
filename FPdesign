@@ -26,14 +26,14 @@ while True:
         continue
 
     item = input(f"Item name for {cat}: ").strip() #allows them to input and item and strips it
-    if item:         #
-        wardrobe[cat].append(item)
+    if item:
+        wardrobe[cat].append(item) #adds item to list and prints it back
         print(f"Added '{item}' to {cat}.\n")
 
-print("\nYour wardrobe:")
+print("\nYour wardrobe:") #prints wardrobe inventory
 print(wardrobe)
 
-OCCASIONS = [
+OCCASIONS = [  #lists possible occasions
     "casual",
     "work / class",
     "going out",
@@ -42,7 +42,7 @@ OCCASIONS = [
     "date"
 ]
 
-print("What's the occasion?")
+print("What's the occasion?") # asks user what the occasions is
 for i, occ in enumerate(OCCASIONS, 1):
     print(f"  {i}. {occ}")
 
