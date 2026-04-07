@@ -53,7 +53,7 @@ while True: #start loop that asks user for the occasions
         occasion = OCCASIONS[int(choice) - 1] #subtracts 1 from choice beacuse indexing starts at 0 but occ list starts at 1
         break
     elif choice:
-        occasion = choice.lower()
+        occasion = choice.lower() #makes choice lowercase
         break
     else:
         print("Please enter something.")
