@@ -2,7 +2,7 @@
     #then returns outfit ideas
 print("welcome to your personal stylist!")
 
-wardrobe = {
+wardrobe = {        #This is creating lists for each category in the wardrobe dictionary
     "tops": [],
     "bottoms": [],
     "outerwear": [],
