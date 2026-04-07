@@ -49,7 +49,7 @@ for i, occ in enumerate(OCCASIONS, 1): #loops through occasions and assigns them
 while True: #start loop that asks user for the occasions
     choice = input("\nEnter a number or type your own: ").strip()
 
-    if choice.isdigit() and 1 <= int(choice) <= len(OCCASIONS): #makes sure input is a number converts to integer
+    if choice.isdigit() and 1 <= int(choice) <= len(OCCASIONS): #makes sure input is a number converts to integer and makes sure it is within the length of occasions
         occasion = OCCASIONS[int(choice) - 1]
         break
     elif choice:
