@@ -25,8 +25,8 @@ while True:
         print("Invalid category, try again.")
         continue
 
-    item = input(f"Item name for {cat}: ").strip() #
-    if item:
+    item = input(f"Item name for {cat}: ").strip() #allows them to input and item and strips it
+    if item:         #
         wardrobe[cat].append(item)
         print(f"Added '{item}' to {cat}.\n")
 
