@@ -11,21 +11,21 @@ wardrobe = {        #This is creating lists for each category in the wardrobe di
     "dresses": []
 }
 
-categories = list(wardrobe.keys())
+categories = list(wardrobe.keys()) # grabing category names and putting them into a list
 
 print("Add your clothes. Type 'done' when finished.\n")
 
 while True:
-    print("Categories:", ", ".join(categories))
-    cat = input("Category (or 'done'): ").strip().lower()
+    print("Categories:", ", ".join(categories))                 #allows user to choose a category
+    cat = input("Category (or 'done'): ").strip().lower()     # takes their input andstrips it and makes it all lowercase
 
-    if cat == "done":
+    if cat == "done":    #if they print done then break out of the loop
         break
-    if cat not in wardrobe:
+    if cat not in wardrobe:              #if they input something that is not a category then prompt them to try again
         print("Invalid category, try again.")
         continue
 
-    item = input(f"Item name for {cat}: ").strip()
+    item = input(f"Item name for {cat}: ").strip() #
     if item:
         wardrobe[cat].append(item)
         print(f"Added '{item}' to {cat}.\n")
