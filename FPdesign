@@ -16,8 +16,8 @@ categories = list(wardrobe.keys()) # grabing category names and putting them int
 print("Add your clothes. Type 'done' when finished.\n")
 
 while True:
-    print("Categories:", ", ".join(categories))                 #allows user to choose a category
-    cat = input("Category (or 'done'): ").strip().lower()     # takes their input andstrips it and makes it all lowercase
+    print("Categories:", ", ".join(categories))                 # allows user to choose a category
+    cat = input("Category (or 'done'): ").strip().lower()     # takes their input and strips it and makes it all lowercase
 
     if cat == "done":    #if they print done then break out of the loop
         break
@@ -25,7 +25,7 @@ while True:
         print("Invalid category, try again.")
         continue
 
-    item = input(f"Item name for {cat}: ").strip() #allows them to input and item and strips it
+    item = input(f"Item name for {cat}: ").strip() #allows them to input an item and strips it
     if item:
         wardrobe[cat].append(item) #adds item to list and prints it back
         print(f"Added '{item}' to {cat}.\n")
