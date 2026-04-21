@@ -2,14 +2,40 @@
     #then returns outfit ideas
 print("welcome to your personal stylist!")
 
-wardrobe = {        #This is creating lists for each category in the wardrobe dictionary
-    "tops": [],
-    "bottoms": [],
-    "outerwear": [],
-    "shoes": [],
-    "accessories": [],
-    "dresses": []
-}
+import json
+import os
+
+def load_data():
+    if os.path.exists("wardrobes.json"):
+        with open("wardrobes.json", "r") as file:
+            return json.load(file)
+    return {}
+
+def save_data(data):
+    with open("wardrobes.json", "w") as file:
+        json.dump(data, file, indent=4)
+
+def empty_wardrobe():
+    return {
+        "tops": [],
+        "bottoms": [],
+        "outerwear": [],
+        "shoes": [],
+        "accessories": [],
+        "dresses": []
+    }
+
+data = load_data()
+
+username = input("Enter your username: ").strip().lower()
+
+if username in data:
+    print(f"Welcome back, {username}!")
+    wardrobe = data[username]
+else:
+    print(f"Creating new profile for {username}.")
+    wardrobe = empty_wardrobe()
+    data[username] = wardrobe
 
 categories = list(wardrobe.keys()) # grabing category names and putting them into a list
 
@@ -59,3 +85,7 @@ while True: #start loop that asks user for the occasions
         print("Please enter something.")
 
 print(f"\nOccasion: {occasion}")
+
+data[username] = wardrobe
+save_data(data)
+print("Your wardrobe has been saved.")
