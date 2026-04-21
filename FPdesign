@@ -93,8 +93,8 @@ while True:
         if item not in wardrobe[cat]:
             wardrobe[cat].append(item)
             print(f"Added '{item}' to {cat}.\n")
-        else:
-            print(f"'{item}' is already in {cat}.\n")
+        #else:
+            #print(f"'{item}' is already in {cat}.\n")
 
 show_wardrobe(wardrobe)
 
