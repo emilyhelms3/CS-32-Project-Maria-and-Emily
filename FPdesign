@@ -128,3 +128,18 @@ print(f"\nOccasion: {occasion}")
 data[username] = wardrobe
 save_data(data)
 print("Your wardrobe has been saved.")
+
+weather = input("What's the weather? (hot, mild, cold, rainy): ").strip().lower()
+
+outfit = generate_outfit(wardrobe, occasion, weather)
+
+print("\nSuggested outfit:")
+if outfit:
+    for key, value in outfit.items():
+        print(f"{key.title()}: {value}")
+else:
+    print("Not enough clothing items to generate an outfit.")
+
+data[username] = wardrobe
+save_data(data)
+print("\nYour wardrobe has been saved.")
