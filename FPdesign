@@ -1,9 +1,12 @@
 # outfit creater that takes input of list of possible items of clothes and considers constraits
     #then returns outfit ideas
-print("welcome to your personal stylist!")
-
 import json
 import os
+import random
+
+
+print("welcome to your personal stylist!")
+
 
 def load_data():
     if os.path.exists("wardrobes.json"):
@@ -24,6 +27,12 @@ def empty_wardrobe():
         "accessories": [],
         "dresses": []
     }
+
+
+
+
+
+
 
 data = load_data()
 
