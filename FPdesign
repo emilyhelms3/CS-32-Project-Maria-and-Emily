@@ -28,11 +28,35 @@ def empty_wardrobe():
         "dresses": []
     }
 
+def show_wardrobe(wardrobe):
+    print("\nYour wardrobe:")
+    for category, items in wardrobe.items():
+        if items:
+            print(f"{category.title()}: {', '.join(items)}")
+        else:
+            print(f"{category.title()}: None")
 
+def generate_outfit(wardrobe, occasion, weather):
+    outfit = {}
 
+    if wardrobe["dresses"] and occasion in ["formal / event", "date"]:
+        outfit["dress"] = random.choice(wardrobe["dresses"])
+    else:
+        if wardrobe["tops"]:
+            outfit["top"] = random.choice(wardrobe["tops"])
+        if wardrobe["bottoms"]:
+            outfit["bottom"] = random.choice(wardrobe["bottoms"])
 
+    if wardrobe["shoes"]:
+        outfit["shoes"] = random.choice(wardrobe["shoes"])
 
+    if weather in ["cold", "rainy"] and wardrobe["outerwear"]:
+        outfit["outerwear"] = random.choice(wardrobe["outerwear"])
 
+    if wardrobe["accessories"]:
+        outfit["accessory"] = random.choice(wardrobe["accessories"])
+
+    return outfit
 
 data = load_data()
 
@@ -72,8 +96,7 @@ while True:
         else:
             print(f"'{item}' is already in {cat}.\n")
 
-print("\nYour wardrobe:") #prints wardrobe inventory
-print(wardrobe)
+show_wardrobe(wardrobe)
 
 OCCASIONS = [  #lists possible occasions
     "casual",
