@@ -56,6 +56,13 @@ while True:
         wardrobe[cat].append(item) #adds item to list and prints it back
         print(f"Added '{item}' to {cat}.\n")
 
+    if item:
+        if item not in wardrobe[cat]:
+            wardrobe[cat].append(item)
+            print(f"Added '{item}' to {cat}.\n")
+        else:
+            print(f"'{item}' is already in {cat}.\n")
+
 print("\nYour wardrobe:") #prints wardrobe inventory
 print(wardrobe)
 
