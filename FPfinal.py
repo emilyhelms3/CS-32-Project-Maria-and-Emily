@@ -66,7 +66,7 @@ def generate_outfit(wardrobe, occasion, weather):
 
     weather_keywords = {
         "hot": ["tank", "t-shirt", "tee", "short sleeve", "shorts", "skirt", "sandals"],
-        "mild": ["t-shirt", "tee", "jeans", "sneakers", "cardigan"],
+        "mild": ["t-shirt", "t-shirt", "tee", "jeans", "sneakers", "cardigan"],
         "cold": ["sweater", "hoodie", "long sleeve", "jeans", "boots", "coat", "jacket"],
         "rainy": ["jacket", "raincoat", "boots", "sneakers", "hoodie"]
     }
