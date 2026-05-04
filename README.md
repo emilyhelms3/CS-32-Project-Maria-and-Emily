@@ -33,8 +33,9 @@ Open the project folder in your IDE or terminal.
 
 Run the program using:
 
-
-python your_script_name.py
+pip install Flask
+python3 FPfinal.py
+then open port 5000 on browser through popup
 
 
 Follow the prompts:
