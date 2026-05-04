@@ -21,45 +21,6 @@ OCCASIONS = [
 WEATHER_OPTIONS = ["hot", "mild", "cold", "rainy"]
 
 
-def load_data():
-    if os.path.exists(DATA_FILE):
-        with open(DATA_FILE, "r") as file:
-            return json.load(file)
-    return {}
-
-
-def save_data(data):
-    with open(DATA_FILE, "w") as file:
-        json.dump(data, file, indent=4)
-
-
-def empty_wardrobe():
-    return {
-        "tops": [],
-        "bottoms": [],
-        "outerwear": [],
-        "shoes": [],
-        "accessories": [],
-        "dresses": []
-    }
-
-
-def item_matches_keywords(item, keywords):
-    item = item.lower()
-    return any(keyword in item for keyword in keywords)
-
-
-def choose_best_item(items, keywords):
-    matching_items = [
-        item for item in items
-        if item_matches_keywords(item, keywords)
-    ]
-
-    if matching_items:
-        return random.choice(matching_items)
-
-    return random.choice(items) if items else None
-
 
 def generate_outfit(wardrobe, occasion, weather):
     outfit = {}
