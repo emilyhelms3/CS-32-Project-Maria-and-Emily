@@ -44,28 +44,81 @@ def empty_wardrobe():
     }
 
 
+def item_matches_keywords(item, keywords):
+    item = item.lower()
+    return any(keyword in item for keyword in keywords)
+
+
+def choose_best_item(items, keywords):
+    matching_items = [
+        item for item in items
+        if item_matches_keywords(item, keywords)
+    ]
+
+    if matching_items:
+        return random.choice(matching_items)
+
+    return random.choice(items) if items else None
+
+
 def generate_outfit(wardrobe, occasion, weather):
     outfit = {}
 
-    if wardrobe["dresses"] and occasion in ["formal / event", "date"]:
-        outfit["Dress"] = random.choice(wardrobe["dresses"])
+    weather_keywords = {
+        "hot": ["tank", "t-shirt", "tee", "short sleeve", "shorts", "skirt", "sandals"],
+        "mild": ["t-shirt", "tee", "jeans", "sneakers", "cardigan"],
+        "cold": ["sweater", "hoodie", "long sleeve", "jeans", "boots", "coat", "jacket"],
+        "rainy": ["jacket", "raincoat", "boots", "sneakers", "hoodie"]
+    }
+
+    occasion_keywords = {
+        "casual": ["t-shirt", "tee", "hoodie", "jeans", "leggings", "sneakers"],
+        "work / class": ["blouse", "sweater", "cardigan", "jeans", "pants", "flats", "sneakers"],
+        "going out": ["nice", "black", "skirt", "dress", "boots", "heels"],
+        "formal / event": ["dress", "blouse", "skirt", "heels", "flats", "blazer"],
+        "outdoor / active": ["t-shirt", "tee", "shorts", "leggings", "sneakers", "hoodie"],
+        "date": ["dress", "skirt", "nice", "blouse", "boots", "heels"]
+    }
+
+    keywords = weather_keywords.get(weather, []) + occasion_keywords.get(occasion, [])
+
+    # Dresses are preferred for formal events or dates
+    if occasion in ["formal / event", "date"] and wardrobe["dresses"]:
+        dress = choose_best_item(wardrobe["dresses"], keywords)
+        outfit["Dress"] = dress
     else:
-        if wardrobe["tops"]:
-            outfit["Top"] = random.choice(wardrobe["tops"])
-        if wardrobe["bottoms"]:
-            outfit["Bottom"] = random.choice(wardrobe["bottoms"])
+        top = choose_best_item(wardrobe["tops"], keywords)
+        bottom = choose_best_item(wardrobe["bottoms"], keywords)
 
-    if wardrobe["shoes"]:
-        outfit["Shoes"] = random.choice(wardrobe["shoes"])
+        if top:
+            outfit["Top"] = top
+        if bottom:
+            outfit["Bottom"] = bottom
 
+    shoes = choose_best_item(wardrobe["shoes"], keywords)
+    if shoes:
+        outfit["Shoes"] = shoes
+
+    # Add outerwear when weather needs it
     if weather in ["cold", "rainy"] and wardrobe["outerwear"]:
-        outfit["Outerwear"] = random.choice(wardrobe["outerwear"])
+        outerwear = choose_best_item(wardrobe["outerwear"], keywords)
+        outfit["Outerwear"] = outerwear
 
-    if wardrobe["accessories"]:
-        outfit["Accessory"] = random.choice(wardrobe["accessories"])
+    # Avoid heavy outerwear in hot weather
+    if weather == "hot":
+        outfit["Weather Note"] = "Hot weather: lighter clothes are recommended."
+
+    if weather == "cold":
+        outfit["Weather Note"] = "Cold weather: layering is recommended."
+
+    if weather == "rainy":
+        outfit["Weather Note"] = "Rainy weather: waterproof shoes or a jacket are recommended."
+
+    accessory = choose_best_item(wardrobe["accessories"], keywords)
+    if accessory:
+        outfit["Accessory"] = accessory
 
     return outfit
-
 
 HTML = """
 <!DOCTYPE html>
