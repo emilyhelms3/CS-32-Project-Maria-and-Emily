@@ -1,8 +1,9 @@
 import json
 import os
 import random
-import tkinter as tk
-from tkinter import ttk, messagebox
+from flask import Flask, render_template_string, request, redirect, url_for
+
+app = Flask(__name__)
 
 DATA_FILE = "wardrobes.json"
 
@@ -66,150 +67,177 @@ def generate_outfit(wardrobe, occasion, weather):
     return outfit
 
 
-class OutfitApp:
-    def __init__(self, root):
-        self.root = root
-        self.root.title("Personal Stylist")
-        self.root.geometry("600x550")
+HTML = """
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Personal Stylist</title>
+    <style>
+        body {
+            font-family: Arial;
+            background-color: #f7f0f5;
+            padding: 30px;
+        }
 
-        self.data = load_data()
-        self.username = ""
-        self.wardrobe = None
+        .container {
+            max-width: 750px;
+            margin: auto;
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+        }
 
-        self.create_login_screen()
+        h1, h2 {
+            color: #8b3a62;
+        }
 
-    def clear_screen(self):
-        for widget in self.root.winfo_children():
-            widget.destroy()
+        input, select, button {
+            padding: 8px;
+            margin: 5px;
+        }
 
-    def create_login_screen(self):
-        self.clear_screen()
+        button {
+            background-color: #8b3a62;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
 
-        title = tk.Label(self.root, text="Welcome to Your Personal Stylist!", font=("Arial", 18, "bold"))
-        title.pack(pady=20)
+        .box {
+            background-color: #f2e6ee;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+        }
+    </style>
+</head>
 
-        tk.Label(self.root, text="Enter your username:").pack()
+<body>
+<div class="container">
+    <h1>Welcome to Your Personal Stylist!</h1>
 
-        self.username_entry = tk.Entry(self.root, width=30)
-        self.username_entry.pack(pady=10)
+    <form method="POST" action="/">
+        <label>Username:</label>
+        <input type="text" name="username" value="{{ username }}" required>
+        <button type="submit" name="action" value="login">Log In / Create Profile</button>
+    </form>
 
-        login_button = tk.Button(self.root, text="Continue", command=self.login)
-        login_button.pack(pady=10)
+    {% if username %}
+        <h2>Hello, {{ username }}!</h2>
 
-    def login(self):
-        username = self.username_entry.get().strip().lower()
+        <div class="box">
+            <h2>Add Clothes</h2>
+            <form method="POST" action="/">
+                <input type="hidden" name="username" value="{{ username }}">
 
-        if not username:
-            messagebox.showerror("Error", "Please enter a username.")
-            return
+                <select name="category">
+                    {% for category in categories %}
+                        <option value="{{ category }}">{{ category.title() }}</option>
+                    {% endfor %}
+                </select>
 
-        self.username = username
+                <input type="text" name="item" placeholder="Item name" required>
 
-        if username not in self.data:
-            self.data[username] = empty_wardrobe()
+                <button type="submit" name="action" value="add">Add Item</button>
+            </form>
+        </div>
 
-        self.wardrobe = self.data[username]
-        self.create_main_screen()
+        <div class="box">
+            <h2>Your Wardrobe</h2>
+            {% for category, items in wardrobe.items() %}
+                <p><strong>{{ category.title() }}:</strong>
+                {% if items %}
+                    {{ items | join(", ") }}
+                {% else %}
+                    None
+                {% endif %}
+                </p>
+            {% endfor %}
+        </div>
 
-    def create_main_screen(self):
-        self.clear_screen()
+        <div class="box">
+            <h2>Generate Outfit</h2>
+            <form method="POST" action="/">
+                <input type="hidden" name="username" value="{{ username }}">
 
-        title = tk.Label(self.root, text=f"Hello, {self.username}!", font=("Arial", 16, "bold"))
-        title.pack(pady=10)
+                <label>Occasion:</label>
+                <select name="occasion">
+                    {% for occasion in occasions %}
+                        <option value="{{ occasion }}">{{ occasion }}</option>
+                    {% endfor %}
+                </select>
 
-        frame = tk.Frame(self.root)
-        frame.pack(pady=10)
+                <label>Weather:</label>
+                <select name="weather">
+                    {% for weather in weather_options %}
+                        <option value="{{ weather }}">{{ weather }}</option>
+                    {% endfor %}
+                </select>
 
-        tk.Label(frame, text="Category:").grid(row=0, column=0, padx=5)
+                <button type="submit" name="action" value="generate">Generate Outfit</button>
+            </form>
+        </div>
 
-        self.category_box = ttk.Combobox(frame, values=CATEGORIES, state="readonly")
-        self.category_box.grid(row=0, column=1, padx=5)
-        self.category_box.current(0)
-
-        tk.Label(frame, text="Item:").grid(row=1, column=0, padx=5, pady=10)
-
-        self.item_entry = tk.Entry(frame, width=30)
-        self.item_entry.grid(row=1, column=1, padx=5)
-
-        add_button = tk.Button(frame, text="Add Item", command=self.add_item)
-        add_button.grid(row=1, column=2, padx=5)
-
-        self.wardrobe_text = tk.Text(self.root, height=12, width=60)
-        self.wardrobe_text.pack(pady=10)
-
-        self.update_wardrobe_display()
-
-        options_frame = tk.Frame(self.root)
-        options_frame.pack(pady=10)
-
-        tk.Label(options_frame, text="Occasion:").grid(row=0, column=0, padx=5)
-
-        self.occasion_box = ttk.Combobox(options_frame, values=OCCASIONS, state="readonly")
-        self.occasion_box.grid(row=0, column=1, padx=5)
-        self.occasion_box.current(0)
-
-        tk.Label(options_frame, text="Weather:").grid(row=1, column=0, padx=5, pady=10)
-
-        self.weather_box = ttk.Combobox(options_frame, values=WEATHER_OPTIONS, state="readonly")
-        self.weather_box.grid(row=1, column=1, padx=5)
-        self.weather_box.current(1)
-
-        generate_button = tk.Button(self.root, text="Generate Outfit", command=self.show_outfit)
-        generate_button.pack(pady=10)
-
-        self.outfit_label = tk.Label(self.root, text="", font=("Arial", 12), justify="left")
-        self.outfit_label.pack(pady=10)
-
-        save_button = tk.Button(self.root, text="Save Wardrobe", command=self.save_wardrobe)
-        save_button.pack(pady=5)
-
-    def add_item(self):
-        category = self.category_box.get()
-        item = self.item_entry.get().strip()
-
-        if not item:
-            messagebox.showerror("Error", "Please enter an item.")
-            return
-
-        if item in self.wardrobe[category]:
-            messagebox.showinfo("Duplicate", f"{item} is already in {category}.")
-        else:
-            self.wardrobe[category].append(item)
-            self.item_entry.delete(0, tk.END)
-            self.update_wardrobe_display()
-            self.save_wardrobe()
-
-    def update_wardrobe_display(self):
-        self.wardrobe_text.delete("1.0", tk.END)
-
-        for category, items in self.wardrobe.items():
-            if items:
-                self.wardrobe_text.insert(tk.END, f"{category.title()}: {', '.join(items)}\n")
-            else:
-                self.wardrobe_text.insert(tk.END, f"{category.title()}: None\n")
-
-    def show_outfit(self):
-        occasion = self.occasion_box.get()
-        weather = self.weather_box.get()
-
-        outfit = generate_outfit(self.wardrobe, occasion, weather)
-
-        if not outfit:
-            self.outfit_label.config(text="Not enough clothing items to generate an outfit.")
-            return
-
-        outfit_text = "Suggested Outfit:\n"
-        for key, value in outfit.items():
-            outfit_text += f"{key}: {value}\n"
-
-        self.outfit_label.config(text=outfit_text)
-
-    def save_wardrobe(self):
-        self.data[self.username] = self.wardrobe
-        save_data(self.data)
-        messagebox.showinfo("Saved", "Your wardrobe has been saved!")
+        {% if outfit %}
+            <div class="box">
+                <h2>Suggested Outfit</h2>
+                {% for key, value in outfit.items() %}
+                    <p><strong>{{ key }}:</strong> {{ value }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endif %}
+</div>
+</body>
+</html>
+"""
 
 
-root = tk.Tk()
-app = OutfitApp(root)
-root.mainloop()
+@app.route("/", methods=["GET", "POST"])
+def home():
+    data = load_data()
+    username = ""
+    wardrobe = None
+    outfit = None
+
+    if request.method == "POST":
+        username = request.form.get("username", "").strip().lower()
+        action = request.form.get("action")
+
+        if username:
+            if username not in data:
+                data[username] = empty_wardrobe()
+
+            wardrobe = data[username]
+
+            if action == "add":
+                category = request.form.get("category")
+                item = request.form.get("item", "").strip()
+
+                if item and item not in wardrobe[category]:
+                    wardrobe[category].append(item)
+
+                data[username] = wardrobe
+                save_data(data)
+
+            elif action == "generate":
+                occasion = request.form.get("occasion")
+                weather = request.form.get("weather")
+                outfit = generate_outfit(wardrobe, occasion, weather)
+
+            save_data(data)
+
+    return render_template_string(
+        HTML,
+        username=username,
+        wardrobe=wardrobe,
+        categories=CATEGORIES,
+        occasions=OCCASIONS,
+        weather_options=WEATHER_OPTIONS,
+        outfit=outfit
+    )
+
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000, debug=True)
