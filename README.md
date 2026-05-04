@@ -38,11 +38,11 @@ Run the program using:
 
 
 Follow the prompts:
-    - Enter a username to create or access your profile
-    - Add clothing items by category
-    - Select an occasion
-    - Enter the weather
-    - The program will generate an outfit suggestion based on your inputs.
+  - Enter a username to create or access your profile
+  - Add clothing items by category
+  - Select an occasion
+  - Enter the weather
+  - The program will generate an outfit suggestion based on your inputs.
 
 
 ### Design Choices
