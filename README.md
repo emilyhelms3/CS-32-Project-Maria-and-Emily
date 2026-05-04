@@ -13,42 +13,36 @@ The purpose of this project is to design and implement the core logic of an outf
 User profiles stored by username
 Persistent wardrobe saved in a JSON file (wardrobes.json)
 Multiple clothing categories:
-    Tops
-    Bottoms
-    Dresses
-    Outerwear
-    Shoes
-    Accessories
+  - Tops
+  - Bottoms
+  - Dresses
+  - Outerwear
+  - Shoes
+  - Accessories
 Outfit generation based on:
-    Occasion (casual, work/class, going out, formal/event, outdoor/active, date)
-    Weather (hot, mild, cold, rainy)
-    Randomized outfit suggestions from available clothing items
+  - Occasion (casual, work/class, going out, formal/event, outdoor/active, date)
+  - Weather (hot, mild, cold, rainy)
+  - Randomized outfit suggestions from available clothing items
 
 
 ### How to Run the program
-Make sure Python is installed on your computer.
-Download or clone this repository.
-Open the project folder in your IDE or terminal.
+Make sure Python is installed on computer.
+Open the project folder in IDE or terminal.
 
 
 Run the program using:
 
-pip install Flask
-python3 FPfinal.py
-then open port 5000 on browser through popup
+- pip install Flask
+- python3 FPfinal.py
+- then open port 5000 on browser through popup
 
 
 Follow the prompts:
-Enter a username to create or access your profile
-Add clothing items by category
-Select an occasion
-Enter the weather
-The program will generate an outfit suggestion based on your inputs.
-
-
-### File Structure
-your_script_name.py → Main program file
-wardrobes.json → Stores user wardrobe data
+    - Enter a username to create or access your profile
+    - Add clothing items by category
+    - Select an occasion
+    - Enter the weather
+    - The program will generate an outfit suggestion based on your inputs.
 
 
 ### Design Choices
@@ -64,15 +58,15 @@ We used the following resources while developing this project:
 
 
 Python documentation for:
-    json (saving and loading data)
-    os (file handling)
-    random (outfit generation)
+    - json (saving and loading data)
+    - os (file handling)
+    - random (outfit generation)
 Generative AI (ChatGPT) was used to:
-    Help debug parts of the code
-    Suggest improvements to program structure and logic
+    - Help debug parts of the code
+    - Suggest improvements to program structure and logic
+    - Create code for front end
 All code was reviewed, tested, and implemented by us to ensure understanding of how it works.
 
 
 ### Authors
-Emily Helms and Maria Gonzalez
-Outfit creator
+Emily Helms and Maria Gonzalez.
