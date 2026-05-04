@@ -32,7 +32,7 @@ Open the project folder in IDE or terminal.
 
 Run the program using:
 
-- pip install Flask
+- pip install flask
 - python3 FPfinal.py
 - then open port 5000 on browser through popup
 
@@ -61,10 +61,13 @@ Python documentation for:
   - json (saving and loading data)
   - os (file handling)
   - random (outfit generation)
+
 Generative AI (ChatGPT) was used to:
   - Help debug parts of the code
   - Suggest improvements to program structure and logic
-  - Create code for front end
+  - Write code for front end
+  - Edit our code to make sure that generate_outfit caters to weather and occasion
+  - Write code for username system
 All code was reviewed, tested, and implemented by us to ensure understanding of how it works.
 
 
