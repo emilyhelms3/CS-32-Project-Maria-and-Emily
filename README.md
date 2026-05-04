@@ -58,13 +58,13 @@ We used the following resources while developing this project:
 
 
 Python documentation for:
-    - json (saving and loading data)
-    - os (file handling)
-    - random (outfit generation)
+  - json (saving and loading data)
+  - os (file handling)
+  - random (outfit generation)
 Generative AI (ChatGPT) was used to:
-    - Help debug parts of the code
-    - Suggest improvements to program structure and logic
-    - Create code for front end
+  - Help debug parts of the code
+  - Suggest improvements to program structure and logic
+  - Create code for front end
 All code was reviewed, tested, and implemented by us to ensure understanding of how it works.
 
 
