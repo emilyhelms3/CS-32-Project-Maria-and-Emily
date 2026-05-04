@@ -17,5 +17,23 @@
         ],
         "accessories": [],
         "dresses": []
+    },
+    "maria": {
+        "tops": [
+            "Green T-shirt",
+            "White tank top",
+            "pink blouse",
+            "cheetah print shorts",
+            "high rise dark wash jeans"
+        ],
+        "bottoms": [
+            "denim shorts",
+            "cheetah print shorts",
+            "low rise bootcut jeans"
+        ],
+        "outerwear": [],
+        "shoes": [],
+        "accessories": [],
+        "dresses": []
     }
 }
