@@ -22,16 +22,31 @@
         "tops": [
             "Green T-shirt",
             "White tank top",
-            "pink blouse"
+            "pink blouse",
+            "Rain Jacket"
         ],
         "bottoms": [
             "denim shorts",
             "cheetah print shorts",
-            "low rise bootcut jeans"
+            "low rise bootcut jeans",
+            "black mini skirt"
         ],
-        "outerwear": [],
-        "shoes": [],
-        "accessories": [],
-        "dresses": []
+        "outerwear": [
+            "Puffer Jacket",
+            "Cardigan"
+        ],
+        "shoes": [
+            "Rain Boots",
+            "Sandals",
+            "White sneakers",
+            "knee high boots"
+        ],
+        "accessories": [
+            "small purse"
+        ],
+        "dresses": [
+            "Blue gown",
+            "pink mini dress"
+        ]
     }
 }
