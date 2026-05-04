@@ -21,13 +21,59 @@ OCCASIONS = [
 WEATHER_OPTIONS = ["hot", "mild", "cold", "rainy"]
 
 
+def empty_wardrobe():
+    return {
+        "tops": [],
+        "bottoms": [],
+        "outerwear": [],
+        "shoes": [],
+        "accessories": [],
+        "dresses": []
+    }
+
+
+def load_data():
+    if not os.path.exists(DATA_FILE):
+        return {}
+
+    try:
+        with open(DATA_FILE, "r") as file:
+            return json.load(file)
+    except json.JSONDecodeError:
+        return {}
+
+
+def save_data(data):
+    with open(DATA_FILE, "w") as file:
+        json.dump(data, file, indent=4)
+
+
+def choose_best_item(items, keywords):
+    if not items:
+        return None
+
+    matches = []
+
+    for item in items:
+        item_lower = item.lower()
+
+        for keyword in keywords:
+            if keyword.lower() in item_lower:
+                matches.append(item)
+                break
+
+    if matches:
+        return random.choice(matches)
+
+    return random.choice(items)
+
 
 def generate_outfit(wardrobe, occasion, weather):
     outfit = {}
 
     weather_keywords = {
         "hot": ["tank", "t-shirt", "tee", "short sleeve", "shorts", "skirt", "sandals"],
-        "mild": ["t-shirt", "t-shirt", "tee", "jeans", "sneakers", "cardigan"],
+        "mild": ["t-shirt", "tee", "jeans", "sneakers", "cardigan"],
         "cold": ["sweater", "hoodie", "long sleeve", "jeans", "boots", "coat", "jacket"],
         "rainy": ["jacket", "raincoat", "boots", "sneakers", "hoodie"]
     }
@@ -52,18 +98,23 @@ def generate_outfit(wardrobe, occasion, weather):
 
         if top:
             outfit["Top"] = top
+
         if bottom:
             outfit["Bottom"] = bottom
 
     shoes = choose_best_item(wardrobe["shoes"], keywords)
+
     if shoes:
         outfit["Shoes"] = shoes
 
     if weather in ["cold", "rainy"] and wardrobe["outerwear"]:
         outerwear = choose_best_item(wardrobe["outerwear"], keywords)
-        outfit["Outerwear"] = outerwear
+
+        if outerwear:
+            outfit["Outerwear"] = outerwear
 
     accessory = choose_best_item(wardrobe["accessories"], keywords)
+
     if accessory:
         outfit["Accessory"] = accessory
 
@@ -73,6 +124,9 @@ def generate_outfit(wardrobe, occasion, weather):
         outfit["Weather Note"] = "Cold weather: layering is recommended."
     elif weather == "rainy":
         outfit["Weather Note"] = "Rainy weather: waterproof shoes or a jacket are recommended."
+
+    if not outfit:
+        outfit["Message"] = "Add more clothing items to your wardrobe to generate an outfit."
 
     return outfit
 
@@ -255,8 +309,7 @@ def home():
                 category = request.form.get("category")
                 item = request.form.get("item", "").strip()
 
-                # Avoid adding the same clothing item twice.
-                if item and item not in wardrobe[category]:
+                if category in CATEGORIES and item and item not in wardrobe[category]:
                     wardrobe[category].append(item)
 
                 data[username] = wardrobe
@@ -266,8 +319,7 @@ def home():
                 category = request.form.get("category")
                 item = request.form.get("item", "").strip()
 
-                # Remove the selected item from the correct clothing category.
-                if item in wardrobe.get(category, []):
+                if category in CATEGORIES and item in wardrobe.get(category, []):
                     wardrobe[category].remove(item)
 
                 data[username] = wardrobe
@@ -279,7 +331,8 @@ def home():
 
                 outfit = generate_outfit(wardrobe, occasion, weather)
 
-            save_data(data)
+            else:
+                save_data(data)
 
     return render_template_string(
         HTML,
@@ -293,4 +346,4 @@ def home():
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    app.run(debug=True)
