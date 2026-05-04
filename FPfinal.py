@@ -1,7 +1,7 @@
 import json
 import os
 import random
-from flask import Flask, render_template_string, request, redirect, url_for
+from flask import Flask, render_template_string, request
 
 app = Flask(__name__)
 
@@ -82,7 +82,6 @@ def generate_outfit(wardrobe, occasion, weather):
 
     keywords = weather_keywords.get(weather, []) + occasion_keywords.get(occasion, [])
 
-    # Dresses are preferred for formal events or dates
     if occasion in ["formal / event", "date"] and wardrobe["dresses"]:
         dress = choose_best_item(wardrobe["dresses"], keywords)
         outfit["Dress"] = dress
@@ -99,32 +98,30 @@ def generate_outfit(wardrobe, occasion, weather):
     if shoes:
         outfit["Shoes"] = shoes
 
-    # Add outerwear when weather needs it
     if weather in ["cold", "rainy"] and wardrobe["outerwear"]:
         outerwear = choose_best_item(wardrobe["outerwear"], keywords)
         outfit["Outerwear"] = outerwear
-
-    # Avoid heavy outerwear in hot weather
-    if weather == "hot":
-        outfit["Weather Note"] = "Hot weather: lighter clothes are recommended."
-
-    if weather == "cold":
-        outfit["Weather Note"] = "Cold weather: layering is recommended."
-
-    if weather == "rainy":
-        outfit["Weather Note"] = "Rainy weather: waterproof shoes or a jacket are recommended."
 
     accessory = choose_best_item(wardrobe["accessories"], keywords)
     if accessory:
         outfit["Accessory"] = accessory
 
+    if weather == "hot":
+        outfit["Weather Note"] = "Hot weather: lighter clothes are recommended."
+    elif weather == "cold":
+        outfit["Weather Note"] = "Cold weather: layering is recommended."
+    elif weather == "rainy":
+        outfit["Weather Note"] = "Rainy weather: waterproof shoes or a jacket are recommended."
+
     return outfit
+
 
 HTML = """
 <!DOCTYPE html>
 <html>
 <head>
     <title>Personal Stylist</title>
+
     <style>
         body {
             font-family: Arial;
@@ -157,11 +154,20 @@ HTML = """
             cursor: pointer;
         }
 
+        .remove-button {
+            background-color: #cc5c5c;
+            margin-left: 10px;
+        }
+
         .box {
             background-color: #f2e6ee;
             padding: 15px;
             border-radius: 10px;
             margin-top: 15px;
+        }
+
+        li {
+            margin-bottom: 8px;
         }
     </style>
 </head>
@@ -181,6 +187,7 @@ HTML = """
 
         <div class="box">
             <h2>Add Clothes</h2>
+
             <form method="POST" action="/">
                 <input type="hidden" name="username" value="{{ username }}">
 
@@ -198,19 +205,37 @@ HTML = """
 
         <div class="box">
             <h2>Your Wardrobe</h2>
+
             {% for category, items in wardrobe.items() %}
-                <p><strong>{{ category.title() }}:</strong>
+                <p><strong>{{ category.title() }}:</strong></p>
+
                 {% if items %}
-                    {{ items | join(", ") }}
+                    <ul>
+                        {% for item in items %}
+                            <li>
+                                {{ item }}
+
+                                <form method="POST" action="/" style="display:inline;">
+                                    <input type="hidden" name="username" value="{{ username }}">
+                                    <input type="hidden" name="category" value="{{ category }}">
+                                    <input type="hidden" name="item" value="{{ item }}">
+
+                                    <button class="remove-button" type="submit" name="action" value="remove">
+                                        Remove
+                                    </button>
+                                </form>
+                            </li>
+                        {% endfor %}
+                    </ul>
                 {% else %}
-                    None
+                    <p>None</p>
                 {% endif %}
-                </p>
             {% endfor %}
         </div>
 
         <div class="box">
             <h2>Generate Outfit</h2>
+
             <form method="POST" action="/">
                 <input type="hidden" name="username" value="{{ username }}">
 
@@ -235,6 +260,7 @@ HTML = """
         {% if outfit %}
             <div class="box">
                 <h2>Suggested Outfit</h2>
+
                 {% for key, value in outfit.items() %}
                     <p><strong>{{ key }}:</strong> {{ value }}</p>
                 {% endfor %}
@@ -268,8 +294,20 @@ def home():
                 category = request.form.get("category")
                 item = request.form.get("item", "").strip()
 
+                # Avoid adding the same clothing item twice.
                 if item and item not in wardrobe[category]:
                     wardrobe[category].append(item)
+
+                data[username] = wardrobe
+                save_data(data)
+
+            elif action == "remove":
+                category = request.form.get("category")
+                item = request.form.get("item", "").strip()
+
+                # Remove the selected item from the correct clothing category.
+                if item in wardrobe.get(category, []):
+                    wardrobe[category].remove(item)
 
                 data[username] = wardrobe
                 save_data(data)
@@ -277,6 +315,7 @@ def home():
             elif action == "generate":
                 occasion = request.form.get("occasion")
                 weather = request.form.get("weather")
+
                 outfit = generate_outfit(wardrobe, occasion, weather)
 
             save_data(data)
